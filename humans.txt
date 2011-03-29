@@ -1,0 +1,17 @@
+/* the humans responsible & colophon */
+/* humanstxt.org */
+
+
+/* TEAM */
+  Jake Lear
+  Site: http://jacoblear.com
+  Twitter: @jakelear
+  Location: Vienna, VA
+
+/* THANKS */
+  Names (& URL): Dave Desandro (desandro.com)
+
+/* SITE */
+  Standards: HTML5, CSS3
+  Components: Modernizr, jQuery
+  Software:TextMate

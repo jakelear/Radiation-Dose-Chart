@@ -1,0 +1,17 @@
+Radiation Dose Chart
+====================
+
+A few days ago @desandro tweeted: "Call to the community: Re-make [http://xkcd.com/radiation/](http://xkcd.com/radiation/) in HTML / CSS. Use CSS scale transforms to zoom in / out"
+
+
+For now I just got the scaling nailed down and an example for each level to indicate the scale.
+View the live site  [http://jacoblear.com/rads](http://jacoblear.com/rads)
+
+Issues
+------
+* The 'deepest' level isn't to-scale. It's too small at scale and the scaling breaks.  
+* Eventually want to get all the info from the XKCD version in using either a click or hover to expand each level.
+
+Thanks
+------
+[Desandro](http://desandro.com)
