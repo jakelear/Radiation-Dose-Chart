@@ -4,8 +4,18 @@ Radiation Dose Chart
 A few days ago @desandro tweeted: "Call to the community: Re-make [http://xkcd.com/radiation/](http://xkcd.com/radiation/) in HTML / CSS. Use CSS scale transforms to zoom in / out"
 
 
+Version Two (4/07/2011)
+===========
+I'm beginning to flesh this out as a more data-rich visualization for radiation. I've decided to use RaphaelJS in place of the CSS3 transforms, which gives me a bit more control over the scale. (More accuracy) Keep an eye on it for updates.
+
+
+
+
+
+Version One (3/29/2011)
+============
 For now I just got the scaling nailed down and an example for each level to indicate the scale.
-View the live site  [http://jacoblear.com/rads](http://jacoblear.com/rads)
+Original version: View the live site  [http://jacoblear.com/rads](http://jacoblear.com/rads)
 
 Issues
 ------
