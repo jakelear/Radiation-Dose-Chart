@@ -1,7 +1,7 @@
-/* Author: Jake Lear
+/* Author: Jake Lear*/
 
-*/
 
+//Adds connection element for Raphael (From http://raphaeljs.com/graffle.html)
 Raphael.fn.connection = function(obj1, obj2, line, bg) {
     if (obj1.line && obj1.from && obj1.to) {
         line = obj1;
@@ -90,72 +90,87 @@ Raphael.fn.connection = function(obj1, obj2, line, bg) {
 
 
 
-var r = new Raphael("homepage-vis"),
-	connections = [],
-	bubbles = [r.circle(130, 130, 2000000000),r.circle(130, 130, 2000000),r.circle(130, 130, 2000),r.circle(130, 130, 100)];
-	unitConnector = r.circle(296, 70, 1).attr({fill:"#fff", stroke:"#FFF"});
-	bubbles[0].attr({fill: "#FFDC62", stroke: "#FFDC62"});
-	bubbles[1].attr({fill: "#89DAFA", stroke: "#89DAFA"});
-	bubbles[2].attr({fill: "#C2CC1E", stroke: "#C2CC1E"});
-	bubbles[3].attr({fill: "#D91895", stroke: "#D91895"});
-	//for(var i = 0; i < bubbles.length; i +=1){
-	connections[3] = r.connection(bubbles[3], unitConnector, "#fff", "#fff");
-	 var link;
-	//}	
-var RADS = {
-	RNG: function(min,max){
-		return Math.floor(Math.random() * (max - min + 1)) + min;
-	},
+//Radiation Visualization - Global Constructor
+function radVis(){
+	//Basic Properties
+	this.scrolled = 0;
+	this.currentconnection = 3;
+	this.levels = 4;
 	
-
-	getScrollScale: function(scroll) {
-	        //Set up scale 
-	        var scale = Math.pow(1/65, scroll * 4); 
-	        return scale;
-	},
-	scrollZoom: function() {
-	        //cache some elements
-	        var $window = $(window),
-	            $document = $(document);
-	
-	        // normalize scroll value from 0 to 1
-	        scrolled = $window.scrollTop() / ($document.height() - $window.height());
-	        transformScroll(scrolled);
-			
-			
-	        function transformScroll(scroll) {
-				var links = [];
-				for (var i = 0; i<bubbles.length; i+=1){
-					bubbles[i].scale(RADS.getScrollScale(scroll),RADS.getScrollScale(scroll));
-					//console.log(scroll);
-				}		
-				link = r.connection(connections[3]);	
-				var $unitTitle = $('#unit-representation'),
-					$unitText = $unitTitle.html();
-				
-					if (scroll < 0.155 && $unitText != '0.05 &mu;Sv'){
-						$unitTitle.html('0.05 &mu;Sv'); 
-						
-					} else if (scroll > 0.155 && scroll < 0.547 && $unitText != '1 &mu;Sv'){
-						$unitTitle.html('1 &mu;Sv');
-						
-					} else if (scroll > 0.547 && scroll < 0.942 && $unitText != '1 mSv') {
-						$unitTitle.html('1 mSv');
-					} else if (scroll > 0.942 && $unitText != '1 Sv'){
-						$unitTitle.html('1 Sv');
-					}
-	        
-	    }
-	}
-}
-	$(function() {
-		//RADS.initViz();
-	    $(window).scroll(function() {
-	        RADS.scrollZoom();
-			
-	    });
-	});
+	//cache some elements
+    this.$window = $(window),
+    this.$document = $(document);
 		
+	//Setup Raphael Canvas and initial elements
+	this.r = new Raphael("homepage-vis");
+	this.connections = [];
+	this.bubbles = [this.r.circle(130, 130, 2000000000),this.r.circle(130, 130, 2000000),this.r.circle(130, 130, 2000),this.r.circle(130, 130, 100)];
+	this.unitConnector = this.r.circle(296, 70, 1).attr({fill:"#fff", stroke:"#FFF"}); //Unit connector is a small circle that hides underneath the text which serves as a start point for the connectors
+	this.bubbles[0].attr({fill: "#FFDC62", stroke: "#FFDC62"});
+	this.bubbles[1].attr({fill: "#89DAFA", stroke: "#89DAFA"});
+	this.bubbles[2].attr({fill: "#C2CC1E", stroke: "#C2CC1E"});
+	this.bubbles[3].attr({fill: "#D91895", stroke: "#D91895"});
+
+	this.connections[0] = this.r.connection(this.bubbles[0], this.unitConnector, "#fff", "#fff");
+	this.connections[1] = this.r.connection(this.bubbles[1], this.unitConnector, "#fff", "#fff");
+	this.connections[2] = this.r.connection(this.bubbles[2], this.unitConnector, "#fff", "#fff");	
+	this.connections[3] = this.r.connection(this.bubbles[3], this.unitConnector, "#fff", "#fff");
+
+
+}
+
+radVis.prototype.rngMinMax = function(min, max){ //returns random number between min and max
+	return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+radVis.prototype.getScrollScale = function(scroll){
+	//Establishes the scale exponentially based on the number of levels.
+    var scale = Math.pow(1/65, scroll * (this.levels)); 
+    return scale;
+};
+
+radVis.prototype.scrollZoom = function(){ //This is triggered on scroll
+	// normalize scroll value from 0 to 1
+    scrolled = this.$window.scrollTop() / (this.$document.height() - this.$window.height());
+    this.transformScroll(scrolled);
+};
+
+radVis.prototype.transformScroll = function(scroll){ 
+		this.links = [];
+		for (var i = 0; i<this.bubbles.length; i+=1){
+			this.bubbles[i].scale(this.getScrollScale(scroll),this.getScrollScale(scroll));
+			this.links[i] = this.r.connection(this.connections[i]);
+			//console.log(scroll);
+		}		
+			
+		this.$unitTitle = $('#unit-representation');
+		this.$unitText = this.$unitTitle.html();
+		
+			if (scroll < 0.155 && this.$unitText != '0.05 &mu;Sv'){
+				this.$unitTitle.html('0.05 &mu;Sv'); 
+				
+			} else if (scroll > 0.155 && scroll < 0.547 && this.$unitText != '1 &mu;Sv'){
+				this.$unitTitle.html('1 &mu;Sv');
+				
+			} else if (scroll > 0.547 && scroll < 0.942 && this.$unitText != '1 mSv') {
+				this.$unitTitle.html('1 mSv');
+			} else if (scroll > 0.942 && this.$unitText != '1 Sv'){
+				this.$unitTitle.html('1 Sv');
+			}
+};
+
+
+
+var mainVis = new radVis();
+
+$(function() {
+	//RADS.initViz();
+    $(window).scroll(function() {
+        mainVis.scrollZoom();
+		
+    });
+});
+	
 
 	
 
